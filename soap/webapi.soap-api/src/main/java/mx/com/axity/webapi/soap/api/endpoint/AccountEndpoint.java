@@ -12,6 +12,12 @@ import mx.com.axity.webapi.soap.api.util.account.GetAccountResponseFactory;
 import mx.com.axity.webapi.soap.api.ws.account.GetAccountRequest;
 import mx.com.axity.webapi.soap.api.ws.account.GetAccountResponse;
 
+/**
+ * Endpoint for Account SOAP Web Service.
+ * 
+ * @author guillermo.segura@axity.com
+ *
+ */
 @Endpoint
 public class AccountEndpoint {
   private static final String NAMESPACE_URI = "http://axity.com.mx/webapi/soap/api/ws/account";
@@ -19,6 +25,12 @@ public class AccountEndpoint {
   @Autowired
   private AccountService accountService;
 
+  /**
+   * Method for getting an accound by id.
+   * 
+   * @param request
+   * @return
+   */
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetAccountRequest")
   @ResponsePayload
   public GetAccountResponse getAccount(@RequestPayload GetAccountRequest request) {

@@ -27,7 +27,7 @@ import mx.com.axity.webapi.soap.api.ws.person.UpdatePersonRequest;
 import mx.com.axity.webapi.soap.api.ws.person.UpdatePersonResponse;
 
 /**
- * Endpoint class for Person webservice
+ * Endpoint class for Person SOAP Web Service.
  * 
  * @author guillermo.segura@axity.com
  *

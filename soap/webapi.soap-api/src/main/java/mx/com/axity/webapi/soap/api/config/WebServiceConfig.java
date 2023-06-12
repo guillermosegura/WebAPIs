@@ -26,7 +26,7 @@ public class WebServiceConfig {
   private static final String NAMESPACE_URI_ACCOUNT = "http://axity.com.mx/webapi/soap/api/ws/account";
 
   /**
-   * Creates the servlet for endpoimnts /ws/*
+   * Creates the servlet for endpoints /ws/*
    * 
    * @param applicationContext
    * @return
@@ -43,7 +43,7 @@ public class WebServiceConfig {
   /**
    * Defines the bean person for PersonPort.
    * 
-   * @param countriesSchema
+   * @param personSchema
    * @return
    */
   @Bean(name = "person")
@@ -68,9 +68,9 @@ public class WebServiceConfig {
 
 
   /**
-   * Defines the bean person for PersonPort.
+   * Defines the bean person for AccountPort.
    * 
-   * @param countriesSchema
+   * @param accountSchema
    * @return
    */
   @Bean(name = "account")
@@ -84,7 +84,7 @@ public class WebServiceConfig {
   }
 
   /**
-   * Defines the schema location for person.
+   * Defines the schema location for account.
    * 
    * @return
    */

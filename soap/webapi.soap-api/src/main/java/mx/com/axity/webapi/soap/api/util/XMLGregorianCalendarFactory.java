@@ -6,6 +6,12 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+/**
+ * Factory class for javax.xml.datatype.XMLGregorianCalendar
+ * 
+ * @author guillermo.segura@axity.com
+ *
+ */
 public class XMLGregorianCalendarFactory {
 
   /**
