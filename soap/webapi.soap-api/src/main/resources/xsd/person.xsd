@@ -1,0 +1,127 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://axity.com.mx/webapi/soap/api/ws/person"
+  xmlns:tns="http://axity.com.mx/webapi/soap/api/ws/person">
+
+  <xs:complexType name="Person">
+    <xs:sequence>
+      <xs:element name="id" type="xs:int" />
+      <xs:element name="name" type="xs:string" />
+      <xs:element name="lastname" type="xs:string" />
+      <xs:element name="email" type="xs:string" />
+      <xs:element name="active" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Header">
+    <xs:sequence>
+      <xs:element name="code" type="xs:int" />
+      <xs:element name="message" type="xs:string" />
+      <xs:element name="details" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PersonList">
+    <xs:sequence>
+      <xs:element name="person" type="tns:Person" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PaginatedPerson">
+    <xs:sequence>
+      <xs:element name="items" type="tns:PersonList" />
+      <xs:element name="size" type="xs:int" />
+      <xs:element name="offset" type="xs:int" />
+      <xs:element name="records" type="xs:long" />
+      <xs:element name="pages" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="GetPersonRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="id" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="GetPersonResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="header" type="tns:Header" />
+        <xs:element name="body" type="tns:Person" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="GetPersonsRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="size" type="xs:int" />
+        <xs:element name="offset" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="GetPersonsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="header" type="tns:Header" />
+        <xs:element name="body" type="tns:PaginatedPerson" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="CreatePersonRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="person" type="tns:Person" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="CreatePersonResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="header" type="tns:Header" />
+        <xs:element name="body" type="tns:Person" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="UpdatePersonRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="person" type="tns:Person" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="UpdatePersonResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="header" type="tns:Header" />
+        <xs:element name="body" type="tns:Person" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="DeletePersonRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="id" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="DeletePersonResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="header" type="tns:Header" />
+        <xs:element name="body" type="tns:Person" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+
+
+</xs:schema>

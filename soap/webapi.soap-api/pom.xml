@@ -11,8 +11,17 @@
   <dependencies>
     <dependency>
       <groupId>mx.com.axity</groupId>
-      <artifactId>webapi.soap-facade</artifactId>
+      <artifactId>webapi.soap-service</artifactId>
       <version>${project.parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.activation</groupId>
+      <artifactId>jakarta.activation</artifactId>
     </dependency>
   </dependencies>
 
@@ -36,6 +45,37 @@
       </resource>
     </resources>
     <plugins>
+      <!-- tag::xsd[] -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jaxb2-maven-plugin</artifactId>
+        <version>2.5.0</version>
+        <executions>
+          <execution>
+            <id>xjc</id>
+            <goals>
+              <goal>xjc</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <sources>
+            <source>${project.basedir}/src/main/resources/xsd/person.xsd</source>
+            <source>${project.basedir}/src/main/resources/xsd/account.xsd</source>
+          </sources>
+          <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+          <clearOutputDir>false</clearOutputDir>
+          <noGeneratedHeaderComments>true</noGeneratedHeaderComments>
+        </configuration>
+      </plugin>
+      <!-- end::xsd[] -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <generatedSourcesDirectory>src/main/generated</generatedSourcesDirectory>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>

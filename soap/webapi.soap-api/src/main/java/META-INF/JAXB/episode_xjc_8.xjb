@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bindings version="2.1" xmlns="http://java.sun.com/xml/ns/jaxb">
+  <!--
+
+Este archivo ha sido generado por la arquitectura JavaTM para la implantación de la referencia de enlace (JAXB) XML v2.3.2 
+Visite <a href="https://javaee.github.io/jaxb-v2/">https://javaee.github.io/jaxb-v2/</a> 
+Todas las modificaciones realizadas en este archivo se perderán si se vuelve a compilar el esquema de origen. 
+Generado el: 2023.06.11 a las 05:25:46 PM CDT 
+
+  -->
+  <bindings scd="x-schema::tns" xmlns:tns="http://axity.com.mx/webapi/soap/api/ws/account">
+    <schemaBindings map="false">
+      <package name="mx.com.axity.webapi.soap.api.ws.account"/>
+    </schemaBindings>
+    <bindings scd="tns:GetAccountRequest">
+      <class ref="mx.com.axity.webapi.soap.api.ws.account.GetAccountRequest"/>
+    </bindings>
+    <bindings scd="tns:GetAccountResponse">
+      <class ref="mx.com.axity.webapi.soap.api.ws.account.GetAccountResponse"/>
+    </bindings>
+    <bindings scd="~tns:ResponseWrapperAccount">
+      <class ref="mx.com.axity.webapi.soap.api.ws.account.ResponseWrapperAccount"/>
+    </bindings>
+    <bindings scd="~tns:Person">
+      <class ref="mx.com.axity.webapi.soap.api.ws.account.Person"/>
+    </bindings>
+    <bindings scd="~tns:Account">
+      <class ref="mx.com.axity.webapi.soap.api.ws.account.Account"/>
+    </bindings>
+    <bindings scd="~tns:AccountMovement">
+      <class ref="mx.com.axity.webapi.soap.api.ws.account.AccountMovement"/>
+    </bindings>
+    <bindings scd="~tns:AccountMovementList">
+      <class ref="mx.com.axity.webapi.soap.api.ws.account.AccountMovementList"/>
+    </bindings>
+    <bindings scd="~tns:Header">
+      <class ref="mx.com.axity.webapi.soap.api.ws.account.Header"/>
+    </bindings>
+    <bindings scd="~tns:MovementType">
+      <typesafeEnumClass ref="mx.com.axity.webapi.soap.api.ws.account.MovementType"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="http://axity.com.mx/webapi/soap/api/ws/person">
+    <schemaBindings map="false">
+      <package name="mx.com.axity.webapi.soap.api.ws.person"/>
+    </schemaBindings>
+    <bindings scd="tns:GetPersonRequest">
+      <class ref="mx.com.axity.webapi.soap.api.ws.person.GetPersonRequest"/>
+    </bindings>
+    <bindings scd="tns:GetPersonResponse">
+      <class ref="mx.com.axity.webapi.soap.api.ws.person.GetPersonResponse"/>
+    </bindings>
+    <bindings scd="~tns:ResponseWrapperPerson">
+      <class ref="mx.com.axity.webapi.soap.api.ws.person.ResponseWrapperPerson"/>
+    </bindings>
+    <bindings scd="tns:GetPersonsRequest">
+      <class ref="mx.com.axity.webapi.soap.api.ws.person.GetPersonsRequest"/>
+    </bindings>
+    <bindings scd="tns:GetPersonsResponse">
+      <class ref="mx.com.axity.webapi.soap.api.ws.person.GetPersonsResponse"/>
+    </bindings>
+    <bindings scd="~tns:ResponseWrapperPaginatedPerson">
+      <class ref="mx.com.axity.webapi.soap.api.ws.person.ResponseWrapperPaginatedPerson"/>
+    </bindings>
+    <bindings scd="tns:CreatePersonRequest">
+      <class ref="mx.com.axity.webapi.soap.api.ws.person.CreatePersonRequest"/>
+    </bindings>
+    <bindings scd="~tns:Person">
+      <class ref="mx.com.axity.webapi.soap.api.ws.person.Person"/>
+    </bindings>
+    <bindings scd="tns:CreatePersonResponse">
+      <class ref="mx.com.axity.webapi.soap.api.ws.person.CreatePersonResponse"/>
+    </bindings>
+    <bindings scd="tns:UpdatePersonRequest">
+      <class ref="mx.com.axity.webapi.soap.api.ws.person.UpdatePersonRequest"/>
+    </bindings>
+    <bindings scd="tns:UpdatePersonResponse">
+      <class ref="mx.com.axity.webapi.soap.api.ws.person.UpdatePersonResponse"/>
+    </bindings>
+    <bindings scd="tns:DeletePersonRequest">
+      <class ref="mx.com.axity.webapi.soap.api.ws.person.DeletePersonRequest"/>
+    </bindings>
+    <bindings scd="tns:DeletePersonResponse">
+      <class ref="mx.com.axity.webapi.soap.api.ws.person.DeletePersonResponse"/>
+    </bindings>
+    <bindings scd="~tns:Header">
+      <class ref="mx.com.axity.webapi.soap.api.ws.person.Header"/>
+    </bindings>
+    <bindings scd="~tns:PersonList">
+      <class ref="mx.com.axity.webapi.soap.api.ws.person.PersonList"/>
+    </bindings>
+    <bindings scd="~tns:PaginatedPerson">
+      <class ref="mx.com.axity.webapi.soap.api.ws.person.PaginatedPerson"/>
+    </bindings>
+  </bindings>
+</bindings>
+

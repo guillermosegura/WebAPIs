@@ -1,0 +1,2 @@
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://axity.com.mx/webapi/soap/api/ws/account")
+package mx.com.axity.webapi.soap.api.ws.account;

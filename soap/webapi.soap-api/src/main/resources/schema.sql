@@ -31,7 +31,7 @@ CREATE TABLE TH_AccountMovement(
     cd_account INTEGER NOT NULL,
     cd_type INTEGER NOT NULL,
     im_amount DECIMAL(14,2) NOT NULL,
-    ts_movement DATETIME NOT NULL,
+    ts_movement DATETIME NOT NULL
 );
 
 ALTER TABLE TH_AccountMovement
@@ -39,7 +39,7 @@ ADD CONSTRAINT FK_TH_AccountMovement1
 FOREIGN KEY (cd_account)
 REFERENCES TE_Account (cd_id);
 
-ALTER TABLE TH_AccountMovements
+ALTER TABLE TH_AccountMovement
 ADD CONSTRAINT FK_TH_AccountMovement2
 FOREIGN KEY (cd_type)
 REFERENCES TC_MovementType (cd_id);

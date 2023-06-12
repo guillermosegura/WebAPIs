@@ -7,34 +7,33 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import mx.com.axity.webapi.commons.base.ResponseWrapperDTO;
-import mx.com.axity.webapi.commons.dto.AccountDTO;
-import mx.com.axity.webapi.commons.dto.PersonDTO;
-import mx.com.axity.webapi.commons.enums.MovementType;
-import mx.com.axity.webapi.commons.exception.BusinessException;
-import mx.com.axity.webapi.model.entity.AccountDO;
-import mx.com.axity.webapi.model.entity.AccountMovementDO;
-import mx.com.axity.webapi.model.entity.MovementTypeDO;
-import mx.com.axity.webapi.model.entity.PersonDO;
-import mx.com.axity.webapi.persistence.repository.AccountMovementRepository;
-import mx.com.axity.webapi.persistence.repository.AccountRepository;
-import mx.com.axity.webapi.persistence.repository.MovementTypeRepository;
-import mx.com.axity.webapi.persistence.repository.PersonRepository;
-import mx.com.axity.webapi.service.impl.AccountServiceImpl;
+import mx.com.axity.webapi.soap.api.commons.base.ResponseWrapperDTO;
+import mx.com.axity.webapi.soap.api.commons.dto.AccountDTO;
+import mx.com.axity.webapi.soap.api.commons.dto.PersonDTO;
+import mx.com.axity.webapi.soap.api.commons.enums.MovementType;
+import mx.com.axity.webapi.soap.api.commons.exception.BusinessException;
+import mx.com.axity.webapi.soap.api.model.entity.AccountDO;
+import mx.com.axity.webapi.soap.api.model.entity.AccountMovementDO;
+import mx.com.axity.webapi.soap.api.model.entity.MovementTypeDO;
+import mx.com.axity.webapi.soap.api.model.entity.PersonDO;
+import mx.com.axity.webapi.soap.api.persistence.repository.AccountMovementRepository;
+import mx.com.axity.webapi.soap.api.persistence.repository.AccountRepository;
+import mx.com.axity.webapi.soap.api.persistence.repository.MovementTypeRepository;
+import mx.com.axity.webapi.soap.api.persistence.repository.PersonRepository;
+import mx.com.axity.webapi.soap.api.service.AccountService;
+import mx.com.axity.webapi.soap.api.service.impl.AccountServiceImpl;
 
 class AccountServiceTest
 {
@@ -67,7 +66,7 @@ class AccountServiceTest
     PersonDTO person = new PersonDTO();
     person.setId( 1 );
     BigDecimal balance = BigDecimal.valueOf( 5000 );
-    LocalDateTime timestamp = LocalDateTime.now();
+    Date timestamp = Calendar.getInstance().getTime();
 
     // Mock repositories and entities
     PersonDO entityPerson = this.createPersonDO( 1, "John", "Doe", "john.doe@example.com", true );
@@ -116,7 +115,7 @@ class AccountServiceTest
     PersonDTO person = new PersonDTO();
     person.setId( 1 );
     BigDecimal balance = BigDecimal.valueOf( 5000 );
-    LocalDateTime timestamp = LocalDateTime.now();
+    Date timestamp = Calendar.getInstance().getTime();
 
     // Mock repositories and entities
     when( personRepository.findById( person.getId() ) )
@@ -144,7 +143,7 @@ class AccountServiceTest
     PersonDTO person = new PersonDTO();
     person.setId( 1 );
     BigDecimal balance = BigDecimal.valueOf( 5000 );
-    LocalDateTime timestamp = LocalDateTime.now();
+    Date timestamp = Calendar.getInstance().getTime();
 
     // Mock repositories and entities
     PersonDO entityPerson = this.createPersonDO( 1, "John", "Doe", "john.doe@example.com", false );
@@ -171,7 +170,7 @@ class AccountServiceTest
     // Mock input parameters
     int accountId = 1;
     BigDecimal amount = BigDecimal.valueOf( 1000 );
-    LocalDateTime timestamp = LocalDateTime.now();
+    Date timestamp = Calendar.getInstance().getTime();
 
     // Mock repositories and entities
     AccountDO account = new AccountDO();
@@ -225,7 +224,7 @@ class AccountServiceTest
     // Mock input parameters
     int accountId = 1;
     BigDecimal amount = BigDecimal.valueOf( 0 );
-    LocalDateTime timestamp = LocalDateTime.now();
+    Date timestamp = Calendar.getInstance().getTime();
 
     // Mock repositories and entities
 
@@ -252,7 +251,7 @@ class AccountServiceTest
     // Mock input parameters
     int accountId = 1;
     BigDecimal amount = BigDecimal.valueOf( 0 );
-    LocalDateTime timestamp = LocalDateTime.now();
+    Date timestamp = Calendar.getInstance().getTime();
 
     // Mock repositories and entities
     // Mock repositories and entities
@@ -282,7 +281,7 @@ class AccountServiceTest
     // Mock input parameters
     int accountId = 1;
     BigDecimal amount = BigDecimal.valueOf( 0 );
-    LocalDateTime timestamp = LocalDateTime.now();
+    Date timestamp = Calendar.getInstance().getTime();
 
     // Mock repositories and entities
     AccountDO account = new AccountDO();
@@ -311,7 +310,7 @@ class AccountServiceTest
     // Mock input parameters
     int accountId = 1;
     BigDecimal amount = BigDecimal.valueOf( 1000 );
-    LocalDateTime timestamp = LocalDateTime.now();
+    Date timestamp = Calendar.getInstance().getTime();
 
     // Mock repositories and entities
     AccountDO account = new AccountDO();
@@ -366,7 +365,7 @@ class AccountServiceTest
     // Mock input parameters
     int accountId = 1;
     BigDecimal amount = BigDecimal.valueOf( 1000 );
-    LocalDateTime timestamp = LocalDateTime.now();
+    Date timestamp = Calendar.getInstance().getTime();
 
     // Mock repositories and entities
     AccountDO account = new AccountDO();
@@ -394,7 +393,7 @@ class AccountServiceTest
   {
     // Mock input parameters
     int accountId = 1;
-    LocalDateTime timestamp = LocalDateTime.now();
+    Date timestamp = Calendar.getInstance().getTime();
 
     // Mock repositories and entities
     PersonDO entityPerson = this.createPersonDO( 1, "John", "Doe", "john.doe@example.com", true );
@@ -444,7 +443,7 @@ class AccountServiceTest
     // Mock input parameters
     int personId = 1;
     int accountId = 1;
-    LocalDateTime timestamp = LocalDateTime.now();
+    Date timestamp = Calendar.getInstance().getTime();
 
     // Mock repositories and entities
     PersonDO entityPerson = this.createPersonDO( 1, "John", "Doe", "john.doe@example.com", true );

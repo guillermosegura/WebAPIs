@@ -13,17 +13,17 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-
-import mx.com.axity.webapi.commons.base.PaginationDTO;
-import mx.com.axity.webapi.commons.base.ResponseWrapperDTO;
-import mx.com.axity.webapi.commons.dto.PersonDTO;
-import mx.com.axity.webapi.commons.exception.BusinessException;
-import mx.com.axity.webapi.model.entity.PersonDO;
-import mx.com.axity.webapi.persistence.repository.PersonRepository;
-import mx.com.axity.webapi.service.impl.PersonServiceImpl;
+import mx.com.axity.webapi.soap.api.commons.base.PaginatedDTO;
+import mx.com.axity.webapi.soap.api.commons.base.ResponseWrapperDTO;
+import mx.com.axity.webapi.soap.api.commons.dto.PersonDTO;
+import mx.com.axity.webapi.soap.api.commons.exception.BusinessException;
+import mx.com.axity.webapi.soap.api.model.entity.PersonDO;
+import mx.com.axity.webapi.soap.api.persistence.repository.PersonRepository;
+import mx.com.axity.webapi.soap.api.service.PersonService;
+import mx.com.axity.webapi.soap.api.service.impl.PersonServiceImpl;
 
 /***
- * JUnit test class for {@link mx.com.axity.webapi.service.PersonService}.
+ * JUnit test class for {@link mx.com.axity.webapi.soap.api.service.PersonService}.
  * 
  * @author guillermo.segura@axity.com
  */
@@ -142,8 +142,8 @@ class PersonServiceTest
     Mockito.when( personRepository.findAllByActiveIsTrue( Mockito.any( PageRequest.class ) ) ).thenReturn( page );
 
     // Call the service method
-    ResponseWrapperDTO<PaginationDTO<PersonDTO>> response = personService.getPersons( size, offset );
-    PaginationDTO<PersonDTO> paginationDTO = response.getBody();
+    ResponseWrapperDTO<PaginatedDTO<PersonDTO>> response = personService.getPersons( size, offset );
+    PaginatedDTO<PersonDTO> paginationDTO = response.getBody();
 
     // Verify the result
     Assertions.assertEquals( 0, response.getHeader().getCode() );
