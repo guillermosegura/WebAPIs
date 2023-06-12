@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import mx.com.axity.webapi.soap.api.commons.base.HeaderDTO;
 import mx.com.axity.webapi.soap.api.commons.base.PaginatedDTO;
@@ -62,9 +63,13 @@ public class PersonServiceImpl implements PersonService {
    */
   @Override
   public ResponseWrapperDTO<PaginatedDTO<PersonDTO>> getPersons(int size, int offset) {
-    PageRequest pageRequest = PageRequest.of(offset, size);
+    int pageNumber = offset / size;
+    PageRequest pageRequest = PageRequest.of(pageNumber, size, Sort.by("id"));
     Page<PersonDO> page = this.personRepository.findAllByActiveIsTrue(pageRequest);
 
+    long count = this.personRepository.count();
+    List<PersonDO> s = page.getContent();
+    
     List<PersonDTO> items =
         page.getContent().stream().map(PersonDTOFactory::transform).collect(Collectors.toList());
 
