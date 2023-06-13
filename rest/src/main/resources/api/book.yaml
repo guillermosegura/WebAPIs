@@ -1,0 +1,131 @@
+openapi: 3.0.3
+info:
+  title: Book API
+  version: 1.0.0
+paths:
+  /api/books/{id}:
+    get:
+      summary: Get a book by ID
+      operationId: getById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Book found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDTO'
+        '404':
+          description: Book not found
+    put:
+      summary: Update a book by ID
+      operationId: update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: book
+          in: body
+          required: true
+          schema:
+            $ref: '#/components/schemas/BookDTO'
+      responses:
+        '200':
+          description: Book updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDTO'
+        '404':
+          description: Book not found
+    delete:
+      summary: Delete a book by ID
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Book deleted
+        '404':
+          description: Book not found
+  /api/books:
+    get:
+      summary: Get all books
+      operationId: getAll
+      parameters:
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDTO'
+    post:
+      summary: Create a book
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookDTO'
+      responses:
+        '201':
+          description: Book created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDTO'
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    BookDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        author:
+          type: string
+        genre:
+          type: string
+    PaginatedDTO:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookDTO'
+        size:
+          type: integer
+        offset:
+          type: integer
+        records:
+          type: integer
+        pages:
+          type: integer
