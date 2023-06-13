@@ -24,8 +24,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import mx.axity.com.webapi.rest.commons.BookDTO;
-import mx.axity.com.webapi.rest.commons.PaginatedDTO;
+import mx.axity.com.webapi.rest.commons.dto.BookDTO;
+import mx.axity.com.webapi.rest.commons.dto.PaginatedDTO;
 import mx.axity.com.webapi.rest.commons.exception.BusinessException;
 import mx.axity.com.webapi.rest.service.BookService;
 

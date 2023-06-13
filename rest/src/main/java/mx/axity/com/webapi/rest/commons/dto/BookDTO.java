@@ -1,4 +1,4 @@
-package mx.axity.com.webapi.rest.commons;
+package mx.axity.com.webapi.rest.commons.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

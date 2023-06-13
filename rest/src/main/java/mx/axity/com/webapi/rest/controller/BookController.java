@@ -19,8 +19,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import mx.axity.com.webapi.rest.aspectj.JsonResponseInterceptor;
-import mx.axity.com.webapi.rest.commons.BookDTO;
-import mx.axity.com.webapi.rest.commons.PaginatedDTO;
+import mx.axity.com.webapi.rest.commons.dto.BookDTO;
+import mx.axity.com.webapi.rest.commons.dto.PaginatedDTO;
 import mx.axity.com.webapi.rest.service.BookService;
 
 /**

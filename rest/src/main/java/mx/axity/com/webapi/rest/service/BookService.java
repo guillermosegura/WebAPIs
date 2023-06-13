@@ -1,7 +1,7 @@
 package mx.axity.com.webapi.rest.service;
 
-import mx.axity.com.webapi.rest.commons.BookDTO;
-import mx.axity.com.webapi.rest.commons.PaginatedDTO;
+import mx.axity.com.webapi.rest.commons.dto.BookDTO;
+import mx.axity.com.webapi.rest.commons.dto.PaginatedDTO;
 
 /**
  * Service interface for managing books. This interface defines the contract for performing CRUD

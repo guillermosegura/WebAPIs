@@ -17,8 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import mx.axity.com.webapi.rest.commons.BookDTO;
-import mx.axity.com.webapi.rest.commons.PaginatedDTO;
+import mx.axity.com.webapi.rest.commons.dto.BookDTO;
+import mx.axity.com.webapi.rest.commons.dto.PaginatedDTO;
 import mx.axity.com.webapi.rest.commons.exception.BusinessException;
 
 /**

@@ -1,4 +1,4 @@
-package mx.axity.com.webapi.rest.commons;
+package mx.axity.com.webapi.rest.commons.dto;
 
 import java.io.Serializable;
 
@@ -22,7 +22,7 @@ public class ErrorDetailsDTO implements Serializable {
   public ErrorDetailsDTO() {}
 
   /**
-   * Constructor by porperties
+   * Constructor by properties
    * 
    * @param errorCode
    * @param errorMessage

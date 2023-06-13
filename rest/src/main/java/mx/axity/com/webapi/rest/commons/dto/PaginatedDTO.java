@@ -1,4 +1,4 @@
-package mx.axity.com.webapi.rest.commons;
+package mx.axity.com.webapi.rest.commons.dto;
 
 import java.util.List;
 import io.swagger.v3.oas.annotations.media.Schema;
