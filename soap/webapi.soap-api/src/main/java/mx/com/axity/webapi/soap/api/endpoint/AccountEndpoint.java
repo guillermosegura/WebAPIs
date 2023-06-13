@@ -35,12 +35,8 @@ public class AccountEndpoint {
   @ResponsePayload
   public GetAccountResponse getAccount(@RequestPayload GetAccountRequest request) {
     GetAccountResponse response = null;
-    try {
-      ResponseWrapperDTO<AccountDTO> account = accountService.getAccount(request.getId());
-      response = GetAccountResponseFactory.transform(account);
-    } catch (Exception e) {
-      response = GetAccountResponseFactory.transform(e);
-    }
+    ResponseWrapperDTO<AccountDTO> account = accountService.getAccount(request.getId());
+    response = GetAccountResponseFactory.transform(account);
 
     return response;
   }

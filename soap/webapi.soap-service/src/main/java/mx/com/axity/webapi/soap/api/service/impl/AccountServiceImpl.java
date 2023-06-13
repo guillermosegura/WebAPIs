@@ -30,8 +30,7 @@ import mx.com.axity.webapi.soap.api.service.util.AccountDOFactory;
  * @author guillermo.segura@axity.com
  */
 @Service
-public class AccountServiceImpl implements AccountService
-{
+public class AccountServiceImpl implements AccountService {
   @Autowired
   private PersonRepository personRepository;
 
@@ -48,51 +47,47 @@ public class AccountServiceImpl implements AccountService
    * {@inheritDoc}
    */
   @Override
-  public ResponseWrapperDTO<AccountDTO> createAccount( PersonDTO person, BigDecimal balance, Date timestamp )
-  {
-    PersonDO entityPerson = findPersonById( person );
+  public ResponseWrapperDTO<AccountDTO> createAccount(PersonDTO person, BigDecimal balance, Date timestamp) {
+    PersonDO entityPerson = findPersonById(person);
     // Create a new account
     AccountDO account = new AccountDO();
-    account.setPerson( entityPerson );
-    account.setBalance( balance );
-    account.setActive( true );
-    account.setCreatedTimestamp( timestamp );
-    account.setUpdatedTimestamp( timestamp );
-    AccountDO savedAccount = accountRepository.save( account );
+    account.setPerson(entityPerson);
+    account.setBalance(balance);
+    account.setActive(true);
+    account.setCreatedTimestamp(timestamp);
+    account.setUpdatedTimestamp(timestamp);
+    AccountDO savedAccount = accountRepository.save(account);
 
-    AccountMovementDO movement = this.addBalance( balance, timestamp, savedAccount );
+    AccountMovementDO movement = this.addBalance(balance, timestamp, savedAccount);
 
     // Transform and return the account DTO
-    AccountDTO accountDTO = AccountDOFactory.transform( savedAccount, Arrays.asList( movement ) );
+    AccountDTO accountDTO = AccountDOFactory.transform(savedAccount, Arrays.asList(movement));
 
-    ResponseWrapperDTO<AccountDTO> response = new ResponseWrapperDTO<>( new HeaderDTO( 0, "OK", "Account created" ),
-        accountDTO );
+    ResponseWrapperDTO<AccountDTO> response =
+        new ResponseWrapperDTO<>(new HeaderDTO(0, "OK", "Account created"), accountDTO);
 
     return response;
   }
 
-  private AccountMovementDO addBalance( BigDecimal amount, Date timestamp, AccountDO savedAccount )
-  {
-    MovementTypeDO movementType = this.movementTypeRepository.findById( MovementType.ADD_BALANCE.getId() ).get();
+  private AccountMovementDO addBalance(BigDecimal amount, Date timestamp, AccountDO savedAccount) {
+    MovementTypeDO movementType = this.movementTypeRepository.findById(MovementType.ADD_BALANCE.getId()).get();
     AccountMovementDO movement = new AccountMovementDO();
-    movement.setAccount( savedAccount );
-    movement.setAmount( amount );
-    movement.setMovementTimestamp( timestamp );
-    movement.setMovementType( movementType );
+    movement.setAccount(savedAccount);
+    movement.setAmount(amount);
+    movement.setMovementTimestamp(timestamp);
+    movement.setMovementType(movementType);
 
-    movement = this.accountMovementRepository.save( movement );
+    movement = this.accountMovementRepository.save(movement);
 
     return movement;
   }
 
-  private PersonDO findPersonById( PersonDTO person )
-  {
+  private PersonDO findPersonById(PersonDTO person) {
     int personId = person.getId();
-    PersonDO entityPerson = this.personRepository.findById( personId )
-        .orElseThrow( () -> new BusinessException( "Record not found", 100, "The person does not exists." ) );
-    if( !entityPerson.isActive() )
-    {
-      throw new BusinessException( "Record not found", 101, "The person is inactive." );
+    PersonDO entityPerson = this.personRepository.findById(personId)
+        .orElseThrow(() -> new BusinessException(100, "Record not found", "The person does not exists."));
+    if (!entityPerson.isActive()) {
+      throw new BusinessException(101, "Record not found", "The person is inactive.");
     }
     return entityPerson;
   }
@@ -101,44 +96,42 @@ public class AccountServiceImpl implements AccountService
    * {@inheritDoc}
    */
   @Override
-  public ResponseWrapperDTO<AccountDTO> addBalance( int accountId, BigDecimal amount, Date timestamp )
-  {
-    AccountDO account = this.findAccount( accountId );
+  public ResponseWrapperDTO<AccountDTO> addBalance(int accountId, BigDecimal amount, Date timestamp) {
+    AccountDO account = this.findAccount(accountId);
 
-    this.validateAmount( amount );
+    this.validateAmount(amount);
 
-    account.setBalance( account.getBalance().add( amount ) );
-    account.setUpdatedTimestamp( timestamp );
+    account.setBalance(account.getBalance().add(amount));
+    account.setUpdatedTimestamp(timestamp);
 
-    account = this.accountRepository.save( account );
-    this.addBalance( amount, timestamp, account );
+    account = this.accountRepository.save(account);
+    this.addBalance(amount, timestamp, account);
 
     List<AccountMovementDO> movements = this.accountMovementRepository.findLast5Movements();
 
     // Transform and return the account DTO
-    AccountDTO accountDTO = AccountDOFactory.transform( account, movements );
+    AccountDTO accountDTO = AccountDOFactory.transform(account, movements);
 
-    ResponseWrapperDTO<AccountDTO> response = new ResponseWrapperDTO<>( new HeaderDTO( 0, "OK", "Balance account updated" ),
-        accountDTO );
+    ResponseWrapperDTO<AccountDTO> response =
+        new ResponseWrapperDTO<>(new HeaderDTO(0, "OK", "Balance account updated"), accountDTO);
 
     return response;
   }
 
-  private void validateAmount( BigDecimal amount )
-  {
-    if( amount.doubleValue() <= 0.0 )
-    {
-      throw new BusinessException( "Invalid value", 200, "The amount is invalid." );
+  private void validateAmount(BigDecimal amount) {
+    if (amount.doubleValue() < 0.0) {
+      throw new BusinessException(200, "Invalid value", "The amount is negative.");
+    }
+    if (amount.doubleValue() == 0.0) {
+      throw new BusinessException(200, "Invalid value", "The amount is zero.");
     }
   }
 
-  private AccountDO findAccount( int accountId )
-  {
-    AccountDO account = this.accountRepository.findById( accountId )
-        .orElseThrow( () -> new BusinessException( "Record not found", 100, "Account not found" ) );
-    if( !account.isActive() )
-    {
-      throw new BusinessException( "Record not found", 101, "The account is inactive." );
+  private AccountDO findAccount(int accountId) {
+    AccountDO account = this.accountRepository.findById(accountId)
+        .orElseThrow(() -> new BusinessException(100, "Record not found", "Account not found"));
+    if (!account.isActive()) {
+      throw new BusinessException(101, "Record not found", "The account is inactive.");
     }
     return account;
   }
@@ -147,44 +140,41 @@ public class AccountServiceImpl implements AccountService
    * {@inheritDoc}
    */
   @Override
-  public ResponseWrapperDTO<AccountDTO> withdrawBalance( int accountId, BigDecimal amount, Date timestamp )
-  {
-    AccountDO account = this.findAccount( accountId );
+  public ResponseWrapperDTO<AccountDTO> withdrawBalance(int accountId, BigDecimal amount, Date timestamp) {
+    AccountDO account = this.findAccount(accountId);
 
-    this.validateAmount( amount );
+    this.validateAmount(amount);
 
-    if( account.getBalance().compareTo( amount ) < 0 )
-    {
-      throw new BusinessException( "Insufficient balance", 201, "The amount is greater than the balance account." );
+    if (account.getBalance().compareTo(amount) < 0) {
+      throw new BusinessException(201, "Insufficient balance", "The amount is greater than the balance account.");
     }
 
-    account.setBalance( account.getBalance().subtract( amount ) );
-    account.setUpdatedTimestamp( timestamp );
+    account.setBalance(account.getBalance().subtract(amount));
+    account.setUpdatedTimestamp(timestamp);
 
-    account = this.accountRepository.save( account );
-    this.withdrawBalance( amount, timestamp, account );
+    account = this.accountRepository.save(account);
+    this.withdrawBalance(amount, timestamp, account);
 
     List<AccountMovementDO> movements = this.accountMovementRepository.findLast5Movements();
 
     // Transform and return the account DTO
-    AccountDTO accountDTO = AccountDOFactory.transform( account, movements );
+    AccountDTO accountDTO = AccountDOFactory.transform(account, movements);
 
-    ResponseWrapperDTO<AccountDTO> response = new ResponseWrapperDTO<>( new HeaderDTO( 0, "OK", "Balance account updated" ),
-        accountDTO );
+    ResponseWrapperDTO<AccountDTO> response =
+        new ResponseWrapperDTO<>(new HeaderDTO(0, "OK", "Balance account updated"), accountDTO);
 
     return response;
   }
 
-  private AccountMovementDO withdrawBalance( BigDecimal amount, Date timestamp, AccountDO savedAccount )
-  {
-    MovementTypeDO movementType = this.movementTypeRepository.findById( MovementType.BALANCE_WITHDRAWAL.getId() ).get();
+  private AccountMovementDO withdrawBalance(BigDecimal amount, Date timestamp, AccountDO savedAccount) {
+    MovementTypeDO movementType = this.movementTypeRepository.findById(MovementType.BALANCE_WITHDRAWAL.getId()).get();
     AccountMovementDO movement = new AccountMovementDO();
-    movement.setAccount( savedAccount );
-    movement.setAmount( amount );
-    movement.setMovementTimestamp( timestamp );
-    movement.setMovementType( movementType );
+    movement.setAccount(savedAccount);
+    movement.setAmount(amount);
+    movement.setMovementTimestamp(timestamp);
+    movement.setMovementType(movementType);
 
-    movement = this.accountMovementRepository.save( movement );
+    movement = this.accountMovementRepository.save(movement);
 
     return movement;
   }
@@ -193,15 +183,14 @@ public class AccountServiceImpl implements AccountService
    * {@inheritDoc}
    */
   @Override
-  public ResponseWrapperDTO<AccountDTO> getAccount( int accountId )
-  {
-    AccountDO account = this.findAccount( accountId );
+  public ResponseWrapperDTO<AccountDTO> getAccount(int accountId) {
+    AccountDO account = this.findAccount(accountId);
     List<AccountMovementDO> movements = this.accountMovementRepository.findLast5Movements();
 
     // Transform and return the account DTO
-    AccountDTO accountDTO = AccountDOFactory.transform( account, movements );
+    AccountDTO accountDTO = AccountDOFactory.transform(account, movements);
 
-    ResponseWrapperDTO<AccountDTO> response = new ResponseWrapperDTO<>( new HeaderDTO( 0, "OK", "" ), accountDTO );
+    ResponseWrapperDTO<AccountDTO> response = new ResponseWrapperDTO<>(new HeaderDTO(0, "OK", ""), accountDTO);
 
     return response;
   }
@@ -210,12 +199,11 @@ public class AccountServiceImpl implements AccountService
    * {@inheritDoc}
    */
   @Override
-  public ResponseWrapperDTO<List<AccountDTO>> getAccounts( int personId )
-  {
-    List<AccountDO> accounts = this.accountRepository.findByPersonId( personId );
+  public ResponseWrapperDTO<List<AccountDTO>> getAccounts(int personId) {
+    List<AccountDO> accounts = this.accountRepository.findByPersonId(personId);
 
-    ResponseWrapperDTO<List<AccountDTO>> response = new ResponseWrapperDTO<>( new HeaderDTO( 0, "OK", "" ),
-        accounts.stream().map( AccountDOFactory::transform ).collect( Collectors.toList() ) );
+    ResponseWrapperDTO<List<AccountDTO>> response = new ResponseWrapperDTO<>(new HeaderDTO(0, "OK", ""),
+        accounts.stream().map(AccountDOFactory::transform).collect(Collectors.toList()));
 
     return response;
   }

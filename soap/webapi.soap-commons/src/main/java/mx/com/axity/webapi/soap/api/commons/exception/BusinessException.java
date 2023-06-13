@@ -55,16 +55,15 @@ public class BusinessException extends RuntimeException
   }
 
   /**
-   * Constructor by code and details.
+   * Constructor by code and message.
    * 
    * @param code
-   * @param details
+   * @param message
    */
-  public BusinessException( int code, String details )
+  public BusinessException( int code, String message )
   {
-    super();
+    super(message);
     this.code = code;
-    this.details = details;
   }
 
   /**
@@ -74,7 +73,7 @@ public class BusinessException extends RuntimeException
    * @param code
    * @param details
    */
-  public BusinessException( String message, int code, String details )
+  public BusinessException( int code, String message, String details )
   {
     super( message );
     this.code = code;
@@ -84,12 +83,12 @@ public class BusinessException extends RuntimeException
   /**
    * Constructor by message, throwable cause, code and details.
    * 
-   * @param message
-   * @param cause
    * @param code
+   * @param message
    * @param details
+   * @param cause
    */
-  public BusinessException( String message, Throwable cause, int code, String details )
+  public BusinessException( int code, String message, String details, Throwable cause )
   {
     super( message, cause );
     this.code = code;
@@ -99,15 +98,14 @@ public class BusinessException extends RuntimeException
   /**
    * Constructor by throwable cause, code and details.
    * 
-   * @param cause
+   * @param message
    * @param code
    * @param details
    */
-  public BusinessException( Throwable cause, int code, String details )
+  public BusinessException( int code, String message, Throwable cause )
   {
-    super( cause );
+    super( message, cause );
     this.code = code;
-    this.details = details;
   }
 
   /**

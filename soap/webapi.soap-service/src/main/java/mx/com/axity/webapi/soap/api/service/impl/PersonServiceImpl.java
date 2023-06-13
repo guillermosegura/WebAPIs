@@ -51,11 +51,9 @@ public class PersonServiceImpl implements PersonService {
    */
   @Override
   public ResponseWrapperDTO<PersonDTO> getPerson(Integer id) {
-    PersonDO entity = this.personRepository.findById(id)
-        .orElseThrow(() -> new BusinessException(100, "Record not found"));
+    PersonDO entity = this.findPersonById(id);
 
-    return new ResponseWrapperDTO<>(new HeaderDTO(0, "OK", "Record found"),
-        PersonDTOFactory.transform(entity));
+    return new ResponseWrapperDTO<>(new HeaderDTO(0, "OK", "Record found"), PersonDTOFactory.transform(entity));
   }
 
   /**
@@ -69,15 +67,13 @@ public class PersonServiceImpl implements PersonService {
 
     long count = this.personRepository.count();
     List<PersonDO> s = page.getContent();
-    
-    List<PersonDTO> items =
-        page.getContent().stream().map(PersonDTOFactory::transform).collect(Collectors.toList());
 
-    PaginatedDTO<PersonDTO> result = new PaginatedDTO<PersonDTO>(items, size, offset,
-        page.getTotalElements(), page.getTotalPages());
+    List<PersonDTO> items = page.getContent().stream().map(PersonDTOFactory::transform).collect(Collectors.toList());
 
-    return new ResponseWrapperDTO<PaginatedDTO<PersonDTO>>(new HeaderDTO(0, "OK", "Records found"),
-        result);
+    PaginatedDTO<PersonDTO> result =
+        new PaginatedDTO<PersonDTO>(items, size, offset, page.getTotalElements(), page.getTotalPages());
+
+    return new ResponseWrapperDTO<PaginatedDTO<PersonDTO>>(new HeaderDTO(0, "OK", "Records found"), result);
   }
 
   /**
@@ -85,8 +81,7 @@ public class PersonServiceImpl implements PersonService {
    */
   @Override
   public ResponseWrapperDTO<PersonDTO> updatePerson(PersonDTO person) {
-    PersonDO entity = this.personRepository.findById(person.getId())
-        .orElseThrow(() -> new BusinessException(100, "Record not found"));
+    PersonDO entity = this.findPersonById(person.getId());
 
     entity.setName(person.getName());
     entity.setLastname(person.getLastname());
@@ -101,8 +96,7 @@ public class PersonServiceImpl implements PersonService {
    */
   @Override
   public ResponseWrapperDTO<PersonDTO> deletePerson(Integer id) {
-    PersonDO entity = this.personRepository.findById(id)
-        .orElseThrow(() -> new BusinessException(100, "Record not found"));
+    PersonDO entity = this.findPersonById(id);;
 
     if (!entity.isActive()) {
       throw new BusinessException(101, "Record already deleted");
@@ -112,6 +106,11 @@ public class PersonServiceImpl implements PersonService {
     entity = this.personRepository.save(entity);
 
     return new ResponseWrapperDTO<>(new HeaderDTO(0, "OK", "Record deleted"), null);
+  }
+
+  private PersonDO findPersonById(Integer id) {
+    return this.personRepository.findById(id)
+        .orElseThrow(() -> new BusinessException(100, "Record not found", "The person does not exists."));
   }
 
 }

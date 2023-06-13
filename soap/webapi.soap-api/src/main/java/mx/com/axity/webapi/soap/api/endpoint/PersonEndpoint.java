@@ -50,12 +50,8 @@ public class PersonEndpoint {
   public GetPersonResponse getPerson(@RequestPayload GetPersonRequest request) {
 
     GetPersonResponse response = null;
-    try {
-      ResponseWrapperDTO<PersonDTO> person = personService.getPerson(request.getId());
-      response = GetPersonResponseFactory.transform(person);
-    } catch (Exception e) {
-      response = GetPersonResponseFactory.transform(e);
-    }
+    ResponseWrapperDTO<PersonDTO> person = personService.getPerson(request.getId());
+    response = GetPersonResponseFactory.transform(person);
 
     return response;
   }
@@ -70,13 +66,13 @@ public class PersonEndpoint {
   @ResponsePayload
   public GetPersonsResponse getPersons(@RequestPayload GetPersonsRequest request) {
     GetPersonsResponse response = null;
-    try {
-      ResponseWrapperDTO<PaginatedDTO<PersonDTO>> paginated =
-          personService.getPersons(request.getSize(), request.getOffset());
-      response = GetPersonsResponseFactory.transform(paginated);
-    } catch (Exception e) {
-      response = GetPersonsResponseFactory.transform(e);
-    }
+    // try {
+    ResponseWrapperDTO<PaginatedDTO<PersonDTO>> paginated =
+        personService.getPersons(request.getSize(), request.getOffset());
+    response = GetPersonsResponseFactory.transform(paginated);
+    // } catch (Exception e) {
+    // response = GetPersonsResponseFactory.transform(e);
+    // }
     return response;
   }
 
@@ -90,12 +86,12 @@ public class PersonEndpoint {
   @ResponsePayload
   public CreatePersonResponse createPerson(@RequestPayload CreatePersonRequest request) {
     CreatePersonResponse response = null;
-    try {
-      ResponseWrapperDTO<PersonDTO> person = personService.createPerson(PersonFactory.transform(request.getPerson()));
-      response = CreatePersonResponseFactory.transform(person);
-    } catch (Exception e) {
-      response = CreatePersonResponseFactory.transform(e);
-    }
+    // try {
+    ResponseWrapperDTO<PersonDTO> person = personService.createPerson(PersonFactory.transform(request.getPerson()));
+    response = CreatePersonResponseFactory.transform(person);
+    // } catch (Exception e) {
+    // response = CreatePersonResponseFactory.transform(e);
+    // }
     return response;
   }
 
@@ -109,12 +105,12 @@ public class PersonEndpoint {
   @ResponsePayload
   public UpdatePersonResponse updatePerson(@RequestPayload UpdatePersonRequest request) {
     UpdatePersonResponse response = null;
-    try {
-      ResponseWrapperDTO<PersonDTO> person = personService.updatePerson(PersonFactory.transform(request.getPerson()));
-      response = UpdatePersonResponseFactory.transform(person);
-    } catch (Exception e) {
-      response = UpdatePersonResponseFactory.transform(e);
-    }
+    // try {
+    ResponseWrapperDTO<PersonDTO> person = personService.updatePerson(PersonFactory.transform(request.getPerson()));
+    response = UpdatePersonResponseFactory.transform(person);
+    // } catch (Exception e) {
+    // response = UpdatePersonResponseFactory.transform(e);
+    // }
     return response;
   }
 
@@ -128,12 +124,12 @@ public class PersonEndpoint {
   @ResponsePayload
   public DeletePersonResponse deletePerson(@RequestPayload DeletePersonRequest request) {
     DeletePersonResponse response = new DeletePersonResponse();
-    try {
-      ResponseWrapperDTO<PersonDTO> person = personService.deletePerson(request.getId());
-      response = DeletePersonResponseFactory.transform(person);
-    } catch (Exception e) {
-      response = DeletePersonResponseFactory.transform(e);
-    }
+    // try {
+    ResponseWrapperDTO<PersonDTO> person = personService.deletePerson(request.getId());
+    response = DeletePersonResponseFactory.transform(person);
+    // } catch (Exception e) {
+    // response = DeletePersonResponseFactory.transform(e);
+    // }
     return response;
   }
 
