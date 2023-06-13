@@ -94,7 +94,7 @@ public class BookController {
     ResponseEntity<BookDTO> response;
     BookDTO created = this.bookService.create(book);
     HttpHeaders headers = new HttpHeaders();
-    headers.add(HttpHeaders.LOCATION, "/api/book/" + book.getId());
+    headers.add(HttpHeaders.LOCATION, "/api/books/" + book.getId());
 
     response = ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(created);
 
