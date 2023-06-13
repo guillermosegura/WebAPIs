@@ -1,5 +1,7 @@
 package mx.axity.com.webapi.rest.commons;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
@@ -13,12 +15,18 @@ public class BookDTO {
   @Schema(description = "Book ID")
   private Integer id;
 
+  @NotBlank(message = "Title is required")
+  @Size(max = 100, message = "Title must be 100 characters or less")
   @Schema(description = "Book title")
   private String title;
 
+  @NotBlank(message = "Author is required")
+  @Size(max = 100, message = "Author must be 100 characters or less")
   @Schema(description = "Book author")
   private String author;
 
+  @NotBlank(message = "Genre is required")
+  @Size(max = 100, message = "Genre must be 100 characters or less")
   @Schema(description = "Book genre")
   private String genre;
 

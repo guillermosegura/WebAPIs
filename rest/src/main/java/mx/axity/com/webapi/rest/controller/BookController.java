@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import mx.axity.com.webapi.rest.aspectj.JsonResponseInterceptor;
 import mx.axity.com.webapi.rest.commons.BookDTO;
 import mx.axity.com.webapi.rest.commons.PaginatedDTO;
 import mx.axity.com.webapi.rest.service.BookService;
@@ -46,6 +47,7 @@ public class BookController {
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Book found"),
       @ApiResponse(responseCode = "404", description = "Book not found")})
   @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @JsonResponseInterceptor
   public ResponseEntity<BookDTO> getById(@PathVariable("id") Integer id) {
     BookDTO book = this.bookService.getById(id);
 
@@ -66,6 +68,7 @@ public class BookController {
   @Operation(summary = "Get all books")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successful operation")})
   @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
+  @JsonResponseInterceptor
   public ResponseEntity<PaginatedDTO<BookDTO>> getAll(
       @RequestParam(value = "size", required = false, defaultValue = "10") int size,
       @RequestParam(value = "offset", required = false, defaultValue = "0") int offset) {
@@ -85,21 +88,15 @@ public class BookController {
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Book created"),
       @ApiResponse(responseCode = "500", description = "Internal server error")})
   @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @JsonResponseInterceptor
   public ResponseEntity<BookDTO> create(@RequestBody BookDTO book) {
 
     ResponseEntity<BookDTO> response;
-    try {
-      BookDTO created = this.bookService.create(book);
-      HttpHeaders headers = new HttpHeaders();
-      headers.add(HttpHeaders.LOCATION, "/api/book/" + book.getId());
+    BookDTO created = this.bookService.create(book);
+    HttpHeaders headers = new HttpHeaders();
+    headers.add(HttpHeaders.LOCATION, "/api/book/" + book.getId());
 
-      response = ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(created);
-    } catch (Exception e) {
-      HttpHeaders headers = new HttpHeaders();
-      headers.add("X-Message", e.getMessage());
-
-      response = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).headers(headers).body(null);
-    }
+    response = ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(created);
 
     return response;
   }
@@ -115,6 +112,7 @@ public class BookController {
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Book updated"),
       @ApiResponse(responseCode = "404", description = "Book not found")})
   @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @JsonResponseInterceptor
   public ResponseEntity<BookDTO> update(@PathVariable("id") Integer id, @RequestBody BookDTO book) {
 
     book.setId(id);
@@ -140,6 +138,7 @@ public class BookController {
   @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Book deleted"),
       @ApiResponse(responseCode = "404", description = "Book not found")})
   @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @JsonResponseInterceptor
   public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
     boolean removed = this.bookService.delete(id);
 

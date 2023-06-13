@@ -4,51 +4,55 @@ import mx.axity.com.webapi.rest.commons.BookDTO;
 import mx.axity.com.webapi.rest.commons.PaginatedDTO;
 
 /**
- * Interface for Book.
- * 
- * @author guillermo.segura@axity.com
+ * Service interface for managing books. This interface defines the contract for performing CRUD
+ * operations on books.
  *
+ * <p>
+ * <b>Note:</b> Implementations of this interface should provide the necessary business logic to
+ * create, retrieve, update, and delete books.
+ *
+ * @author guillermo.segura@axity.com
  */
 public interface BookService {
+
   /**
-   * Creates a book.
-   * 
-   * @param book
-   * @return
+   * Creates a new book.
+   *
+   * @param book the book to create
+   * @return the created book as a BookDTO
    */
   BookDTO create(BookDTO book);
 
   /**
-   * Get a book by id
-   * 
-   * @param bookId
-   * @return
+   * Retrieves a book by its ID.
+   *
+   * @param bookId the ID of the book to retrieve
+   * @return the retrieved book as a BookDTO, or null if not found
    */
   BookDTO getById(int bookId);
 
   /**
-   * Get all books paginated
-   * 
-   * @param size
-   * @param offset
-   * @return
+   * Retrieves all books in a paginated manner.
+   *
+   * @param size the page size (number of books per page)
+   * @param offset the offset (starting position) of the page
+   * @return a PaginatedDTO containing the list of books in the specified page
    */
   PaginatedDTO<BookDTO> getAll(int size, int offset);
 
   /**
-   * Updates a book
-   * 
-   * @param book
-   * @return
+   * Updates an existing book.
+   *
+   * @param book the book to update
+   * @return the updated book as a BookDTO
    */
   BookDTO update(BookDTO book);
 
   /**
-   * Deletes a book
-   * 
-   * @param bookId
-   * @return
+   * Deletes a book by its ID.
+   *
+   * @param bookId the ID of the book to delete
+   * @return true if the book was successfully deleted, false otherwise
    */
-
   boolean delete(int bookId);
 }
