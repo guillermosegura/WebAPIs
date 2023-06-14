@@ -1,0 +1,113 @@
+openapi: 3.0.0
+info:
+  title: Order API
+  version: 1.0.0
+paths:
+  /orders:
+    get:
+      summary: Get all orders
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Create a new order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInput'
+      responses:
+        '201':
+          description: Created
+  /orders/{orderId}:
+    parameters:
+      - in: path
+        name: orderId
+        schema:
+          type: integer
+        required: true
+    get:
+      summary: Get an order by ID
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+    put:
+      summary: Update an order by ID
+      parameters:
+        - in: path
+          name: orderId
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInput'
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+    delete:
+      summary: Delete an order by ID
+      parameters:
+        - in: path
+          name: orderId
+          schema:
+            type: integer
+          required: true
+      responses:
+        '204':
+          description: No Content
+components:
+  schemas:
+    OrderInput:
+      type: object
+      properties:
+        clientId:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+        total:
+          type: number
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/DetailInput'
+    Order:
+      allOf:
+        - $ref: '#/components/schemas/OrderInput'
+        - type: object
+          properties:
+            id:
+              type: integer
+            details:
+              type: array
+              items:
+                $ref: '#/components/schemas/Detail'
+    DetailInput:
+      type: object
+      properties:
+        orderId:
+          type: integer
+        sku:
+          type: string
+        description:
+          type: string
+        quantity:
+          type: integer
+        price:
+          type: number
+    Detail:
+      allOf:
+        - $ref: '#/components/schemas/DetailInput'
+        - type: object
+          properties:
+            id:
+              type: integer

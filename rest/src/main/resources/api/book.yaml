@@ -1,10 +1,18 @@
-openapi: 3.0.3
+openapi: 3.0.1
 info:
-  title: Book API
-  version: 1.0.0
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8090
+    description: Generated server url
+tags:
+  - name: books
+    description: Operations related to books
 paths:
   /api/books/{id}:
     get:
+      tags:
+        - books
       summary: Get a book by ID
       operationId: getById
       parameters:
@@ -13,6 +21,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int32
       responses:
         '200':
           description: Book found
@@ -22,7 +31,13 @@ paths:
                 $ref: '#/components/schemas/BookDTO'
         '404':
           description: Book not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDTO'
     put:
+      tags:
+        - books
       summary: Update a book by ID
       operationId: update
       parameters:
@@ -31,11 +46,13 @@ paths:
           required: true
           schema:
             type: integer
-        - name: book
-          in: body
-          required: true
-          schema:
-            $ref: '#/components/schemas/BookDTO'
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookDTO'
+        required: true
       responses:
         '200':
           description: Book updated
@@ -45,7 +62,13 @@ paths:
                 $ref: '#/components/schemas/BookDTO'
         '404':
           description: Book not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDTO'
     delete:
+      tags:
+        - books
       summary: Delete a book by ID
       operationId: delete
       parameters:
@@ -54,6 +77,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int32
       responses:
         '204':
           description: Book deleted
@@ -61,6 +85,8 @@ paths:
           description: Book not found
   /api/books:
     get:
+      tags:
+        - books
       summary: Get all books
       operationId: getAll
       parameters:
@@ -69,12 +95,14 @@ paths:
           required: false
           schema:
             type: integer
+            format: int32
             default: 10
         - name: offset
           in: query
           required: false
           schema:
             type: integer
+            format: int32
             default: 0
       responses:
         '200':
@@ -82,16 +110,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedDTO'
+                $ref: '#/components/schemas/PaginatedDTOBookDTO'
     post:
+      tags:
+        - books
       summary: Create a book
       operationId: create
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/BookDTO'
+        required: true
       responses:
         '201':
           description: Book created
@@ -101,31 +131,59 @@ paths:
                 $ref: '#/components/schemas/BookDTO'
         '500':
           description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDTO'
 components:
   schemas:
     BookDTO:
+      required:
+        - author
+        - genre
+        - title
       type: object
       properties:
         id:
           type: integer
+          description: Book ID
+          format: int32
         title:
+          maxLength: 100
+          minLength: 0
           type: string
+          description: Book title
         author:
+          maxLength: 100
+          minLength: 0
           type: string
+          description: Book author
         genre:
+          maxLength: 100
+          minLength: 0
           type: string
-    PaginatedDTO:
+          description: Book genre
+    PaginatedDTOBookDTO:
       type: object
       properties:
         items:
           type: array
+          description: List of items
           items:
             $ref: '#/components/schemas/BookDTO'
         size:
           type: integer
+          description: Page size
+          format: int32
         offset:
           type: integer
+          description: Page offset
+          format: int32
         records:
           type: integer
+          description: Total number of records
+          format: int64
         pages:
           type: integer
+          description: Total number of pages
+          format: int32
