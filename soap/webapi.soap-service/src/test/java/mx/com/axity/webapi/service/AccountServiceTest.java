@@ -192,7 +192,7 @@ class AccountServiceTest {
     accountMovement.setMovementType(movement);
     accountMovement.setAccount(savedAccount);
     List<AccountMovementDO> movements = Arrays.asList(accountMovement);
-    when(accountMovementRepository.findLast5Movements()).thenReturn(movements);
+    when(accountMovementRepository.findLast5Movements(1)).thenReturn(movements);
 
     // Invoke the method under test
     ResponseWrapperDTO<AccountDTO> response = accountService.addBalance(accountId, amount, timestamp);
@@ -200,7 +200,7 @@ class AccountServiceTest {
     // Verify the interactions with repositories
     verify(accountRepository, times(1)).findById(accountId);
     verify(accountRepository, times(1)).save(any(AccountDO.class));
-    verify(accountMovementRepository, times(1)).findLast5Movements();
+    verify(accountMovementRepository, times(1)).findLast5Movements(1);
     verify(accountMovementRepository, times(1)).save(any(AccountMovementDO.class));
 
     // Assert the response
@@ -356,7 +356,7 @@ class AccountServiceTest {
     accountMovement.setMovementType(movement);
     accountMovement.setAccount(savedAccount);
     List<AccountMovementDO> movements = Arrays.asList(accountMovement);
-    when(accountMovementRepository.findLast5Movements()).thenReturn(movements);
+    when(accountMovementRepository.findLast5Movements(1)).thenReturn(movements);
 
     // Invoke the method under test
     ResponseWrapperDTO<AccountDTO> response = accountService.withdrawBalance(accountId, amount, timestamp);
@@ -364,7 +364,7 @@ class AccountServiceTest {
     // Verify the interactions with repositories
     verify(accountRepository, times(1)).findById(accountId);
     verify(accountRepository, times(1)).save(any(AccountDO.class));
-    verify(accountMovementRepository, times(1)).findLast5Movements();
+    verify(accountMovementRepository, times(1)).findLast5Movements(1);
     verify(accountMovementRepository, times(1)).save(any(AccountMovementDO.class));
 
     // Assert the response
@@ -434,14 +434,14 @@ class AccountServiceTest {
     accountMovement.setMovementType(movement);
     accountMovement.setAccount(account);
     List<AccountMovementDO> movements = Arrays.asList(accountMovement);
-    when(accountMovementRepository.findLast5Movements()).thenReturn(movements);
+    when(accountMovementRepository.findLast5Movements(1)).thenReturn(movements);
 
     // Invoke the method under test
     ResponseWrapperDTO<AccountDTO> response = accountService.getAccount(accountId);
 
     // Verify the interactions with repositories
     verify(accountRepository, times(1)).findById(accountId);
-    verify(accountMovementRepository, times(1)).findLast5Movements();
+    verify(accountMovementRepository, times(1)).findLast5Movements(1);
 
     // Assert the response
     assertNotNull(response);

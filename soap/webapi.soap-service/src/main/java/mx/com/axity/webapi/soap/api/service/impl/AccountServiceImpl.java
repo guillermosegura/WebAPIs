@@ -107,7 +107,7 @@ public class AccountServiceImpl implements AccountService {
     account = this.accountRepository.save(account);
     this.addBalance(amount, timestamp, account);
 
-    List<AccountMovementDO> movements = this.accountMovementRepository.findLast5Movements();
+    List<AccountMovementDO> movements = this.accountMovementRepository.findLast5Movements(accountId);
 
     // Transform and return the account DTO
     AccountDTO accountDTO = AccountDOFactory.transform(account, movements);
@@ -155,7 +155,7 @@ public class AccountServiceImpl implements AccountService {
     account = this.accountRepository.save(account);
     this.withdrawBalance(amount, timestamp, account);
 
-    List<AccountMovementDO> movements = this.accountMovementRepository.findLast5Movements();
+    List<AccountMovementDO> movements = this.accountMovementRepository.findLast5Movements(accountId);
 
     // Transform and return the account DTO
     AccountDTO accountDTO = AccountDOFactory.transform(account, movements);
@@ -185,7 +185,7 @@ public class AccountServiceImpl implements AccountService {
   @Override
   public ResponseWrapperDTO<AccountDTO> getAccount(int accountId) {
     AccountDO account = this.findAccount(accountId);
-    List<AccountMovementDO> movements = this.accountMovementRepository.findLast5Movements();
+    List<AccountMovementDO> movements = this.accountMovementRepository.findLast5Movements(accountId);
 
     // Transform and return the account DTO
     AccountDTO accountDTO = AccountDOFactory.transform(account, movements);
