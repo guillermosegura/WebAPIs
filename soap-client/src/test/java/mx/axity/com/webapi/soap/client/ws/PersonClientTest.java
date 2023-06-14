@@ -1,9 +1,10 @@
 package mx.axity.com.webapi.soap.client.ws;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
+import javax.xml.namespace.QName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.ws.soap.client.SoapFaultClientException;
 import mx.axity.com.webapi.soap.client.config.PersonClientConfig;
 import mx.com.axity.webapi.soap.api.ws.person.GetPersonRequest;
 import mx.com.axity.webapi.soap.api.ws.person.GetPersonResponse;
@@ -25,9 +27,15 @@ import mx.com.axity.webapi.soap.api.ws.person.GetPersonsResponse;
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 class PersonClientTest {
   private static final Logger logger = LoggerFactory.getLogger(PersonClientTest.class);
+  private static final QName CODE = new QName("code");
+  private static final QName MESSAGE = new QName("message");
+  private static final QName DETAILS = new QName("details");
+
 
   @Autowired
   private PersonClient personClient;
+
+
 
   @ParameterizedTest
   @ValueSource(ints = {1, 2, 3, 4, 5})
@@ -45,6 +53,18 @@ class PersonClientTest {
 
   }
 
+  @Test()
+  void testGetPerson_notFound() {
+    GetPersonRequest request = new GetPersonRequest();
+    request.setId(9999);
+
+    SoapFaultClientException soapFaultClientException =
+        assertThrows(SoapFaultClientException.class, () -> this.personClient.getPerson(request));
+
+    logger.info("Ocurrio un error: {}", soapFaultClientException.getFaultStringOrReason());
+    assertNotNull(soapFaultClientException);
+  }
+
   @ParameterizedTest
   @CsvSource({"5,0", "5,5", "5,10", "5,15"})
   void testGetPersons(int size, int offset) {
@@ -55,7 +75,7 @@ class PersonClientTest {
     GetPersonsResponse response = this.personClient.getPersons(request);
     assertNotNull(response);
     assertEquals(0, response.getHeader().getCode());
-    //assertFalse(response.getBody().getItems().getPerson().isEmpty());
+    // assertFalse(response.getBody().getItems().getPerson().isEmpty());
 
     logger.info("size: {}, offset: {}", size, offset);
     response.getBody().getItems().getPerson().stream().forEach(person -> {
