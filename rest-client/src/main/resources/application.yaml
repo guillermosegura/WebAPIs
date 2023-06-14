@@ -1,0 +1,29 @@
+spring:
+  profiles:
+    active:
+    - local
+
+  
+server:
+  port: 8092
+  servlet:
+    context-path: /
+
+services:
+  book:
+    apiUrl: http://localhost:8090/api/books
+    
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  application:
+    name: Arquetipo de Spring Boot + Rest Client
+
+
+
+
+      
