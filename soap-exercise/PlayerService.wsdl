@@ -10,7 +10,7 @@
 
             <xsd:complexType name="PlayerType">
                 <xsd:sequence>
-                    <xs:element name="id" type="xs:integer"/>
+                    <xsd:element name="id" type="xsd:integer"/>
                     <xsd:element name="name" type="xsd:string" />
                     <xsd:element name="race" type="xsd:string" />
                     <xsd:element name="playerClass" type="xsd:string" />
