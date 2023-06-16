@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Order {
     private long id;
     private long clientId;
-    private Date timestamp;
+    private Date ts;
     private double total;
     private List<OrderDetail> details;
 
@@ -32,6 +32,7 @@ import java.util.List;
 @Table(name = "order_table")
 public class OrderDO {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
@@ -39,8 +40,10 @@ public class OrderDO {
     private long clientId;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date timestamp;
+    @Column(name = "ts")
+    private Date ts;
 
+    @Column(name = "total")
     private double total;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
