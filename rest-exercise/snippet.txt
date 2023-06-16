@@ -22,3 +22,48 @@ public class OrderDetail {
 
     // getters y setters
 }
+
+// ---- Entidades
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+
+@Entity
+@Table(name = "order_table")
+public class OrderDO {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "client_id")
+    private long clientId;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timestamp;
+
+    private double total;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderDetailDO> details;
+
+    // getters y setters
+}
+
+@Entity
+@Table(name = "order_detail")
+public class OrderDetailDO {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private OrderDO order;
+
+    private String sku;
+    private String description;
+    private int quantity;
+    private double price;
+
+    // getters y setters
+}
