@@ -1,0 +1,24 @@
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+
+public class Order {
+    private long id;
+    private long clientId;
+    private Date timestamp;
+    private double total;
+    private List<OrderDetail> details;
+
+    // getters y setters
+}
+
+public class OrderDetail {
+    private long id;
+    private long orderId;
+    private String sku;
+    private String description;
+    private int quantity;
+    private double price;
+
+    // getters y setters
+}
