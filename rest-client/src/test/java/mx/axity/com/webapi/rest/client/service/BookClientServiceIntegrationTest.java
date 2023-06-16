@@ -86,7 +86,7 @@ class BookClientServiceIntegrationTest {
    */
   @Test
   void testGetAll() {
-    PaginatedDTO<BookDTO> books = this.bookClientService.getAll(10, 0);
+    PaginatedDTO<BookDTO> books = this.bookClientService.getAll(10, 50);
     logger.info("{}", gson.toJson(books));
   }
 
