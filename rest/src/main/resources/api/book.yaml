@@ -1,10 +1,12 @@
 openapi: 3.0.1
 info:
-  title: OpenAPI definition
-  version: v0
+  title: Definición de las APIs de la Biblioteca
+  version: v1
 servers:
   - url: http://localhost:8090
-    description: Generated server url
+    description: Ambiente de desarrollo local
+  - url: http://192.168.0.27:8090
+    description: Ambiente de desarrollo
 tags:
   - name: books
     description: Operations related to books
@@ -29,6 +31,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BookDTO'
+          
         '404':
           description: Book not found
           content:

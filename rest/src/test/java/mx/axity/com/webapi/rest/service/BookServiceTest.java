@@ -27,7 +27,7 @@ import mx.axity.com.webapi.rest.commons.exception.BusinessException;
  *
  * @author guillermo.segura@axity.com
  */
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Transactional
 class BookServiceTest {
   private static final Logger logger = LoggerFactory.getLogger(BookServiceTest.class);
@@ -46,7 +46,7 @@ class BookServiceTest {
     book.setAuthor("Douglas Adams");
     book.setGenre("Science Fiction");
 
-    book = this.bookService.create(book);
+    book = this.bookService.create(book, false);
     assertNotNull(book);
 
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -61,7 +61,7 @@ class BookServiceTest {
   void testCreate_ValidationError1() {
     BookDTO book = new BookDTO();
 
-    BusinessException be = assertThrows(BusinessException.class, () -> this.bookService.create(book));
+    BusinessException be = assertThrows(BusinessException.class, () -> this.bookService.create(book, false));
     assertNotNull(be);
     assertEquals(1, be.getCode());
     assertTrue(be.getMessage().contains("Title is required"));
@@ -78,7 +78,7 @@ class BookServiceTest {
     BookDTO book = new BookDTO();
     book.setAuthor("John Doe");
 
-    BusinessException be = assertThrows(BusinessException.class, () -> this.bookService.create(book));
+    BusinessException be = assertThrows(BusinessException.class, () -> this.bookService.create(book, false));
     assertNotNull(be);
     assertEquals(1, be.getCode());
     assertTrue(be.getMessage().contains("Title is required"));
@@ -97,7 +97,7 @@ class BookServiceTest {
     book.setTitle(
         "Lorem ipsum dolor sit amet in eos ut sed ea sed dolore nam. Elitr ut esse duis. Eos nulla rebum tempor feugiat vel wisi kasd et adipiscing dolore sed eum rebum. Amet nonummy et dolores. Et dolor sanctus consetetur dolores sadipscing tincidunt nam ipsum eros zzril dolores ut dolore.");
 
-    BusinessException be = assertThrows(BusinessException.class, () -> this.bookService.create(book));
+    BusinessException be = assertThrows(BusinessException.class, () -> this.bookService.create(book, false));
     assertNotNull(be);
     assertEquals(1, be.getCode());
     assertTrue(be.getMessage().contains("Genre is required"));
@@ -115,7 +115,7 @@ class BookServiceTest {
     book.setTitle("To Kill a Mockingbird");
     book.setGenre("Fiction");
 
-    BusinessException be = assertThrows(BusinessException.class, () -> this.bookService.create(book));
+    BusinessException be = assertThrows(BusinessException.class, () -> this.bookService.create(book, false));
     assertNotNull(be);
     assertEquals(100, be.getCode());
     assertEquals("Registry found", be.getMessage());
@@ -153,6 +153,10 @@ class BookServiceTest {
 
     assertEquals(registries, paginated.getItems().size());
     assertEquals(total, paginated.getRecords());
+    
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    logger.info(gson.toJson(paginated.getItems()));
+    
   }
 
   /**
@@ -200,7 +204,7 @@ class BookServiceTest {
     book.setTitle("Java For Dummies");
     book.setAuthor("Barry Burd");
     book.setGenre("Programming");
-    book = this.bookService.create(book);
+    book = this.bookService.create(book, false);
     int id = book.getId();
     assertNotNull(book);
 

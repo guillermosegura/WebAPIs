@@ -66,4 +66,13 @@ public final class BookFactory {
     }
     return dto;
   }
+
+  public static BookDTO createBookDTO(Integer id, String title, String author, String genre) {
+    BookDTO dto = new BookDTO();
+    dto.setId(id);
+    dto.setAuthor(author);
+    dto.setGenre(genre);
+    dto.setTitle(title);
+    return dto;
+  }
 }

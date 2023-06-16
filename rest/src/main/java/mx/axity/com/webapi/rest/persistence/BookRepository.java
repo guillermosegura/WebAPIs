@@ -1,6 +1,6 @@
 package mx.axity.com.webapi.rest.persistence;
 
-import java.util.Optional;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import mx.axity.com.webapi.rest.model.BookDO;
@@ -31,5 +31,5 @@ public interface BookRepository extends JpaRepository<BookDO, Integer> {
    * @param title the title of the book to retrieve
    * @return an Optional containing the book if found, or an empty Optional if not found
    */
-  Optional<BookDO> getByTitle(String title);
+  List<BookDO> getByTitle(String title);
 }

@@ -1,5 +1,6 @@
 package mx.axity.com.webapi.rest.service;
 
+import java.util.List;
 import mx.axity.com.webapi.rest.commons.dto.BookDTO;
 import mx.axity.com.webapi.rest.commons.dto.PaginatedDTO;
 
@@ -19,9 +20,10 @@ public interface BookService {
    * Creates a new book.
    *
    * @param book the book to create
+   * @param allowDuplicate allows duplicate registry
    * @return the created book as a BookDTO
    */
-  BookDTO create(BookDTO book);
+  BookDTO create(BookDTO book, boolean allowDuplicate);
 
   /**
    * Retrieves a book by its ID.
@@ -55,4 +57,11 @@ public interface BookService {
    * @return true if the book was successfully deleted, false otherwise
    */
   boolean delete(int bookId);
+
+  /**
+   * 
+   * @param example
+   * @return
+   */
+  List<BookDTO> findByExample(BookDTO example);
 }

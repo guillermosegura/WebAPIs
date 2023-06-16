@@ -14,6 +14,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import mx.axity.com.webapi.rest.commons.dto.ErrorDetailsDTO;
 import mx.axity.com.webapi.rest.commons.exception.BusinessException;
+import mx.axity.com.webapi.rest.commons.exception.CommonBaseException;
+import mx.axity.com.webapi.rest.commons.exception.ForbiddenException;
+import mx.axity.com.webapi.rest.commons.exception.ValidationException;
 
 /**
  * Aspect class for handling JSON response in the interceptor.
@@ -74,6 +77,23 @@ public class JsonResponseHandlerInterceptor implements HandlerInterceptor {
     try {
       LOG.debug("{}", pjp.toLongString());
       result = pjp.proceed();
+    } catch (BusinessException e) {
+      LOG.error(e.getMessage(), e);
+      // Builds the generic error JSON object
+      ErrorDetailsDTO errorDetails = createrErrorDetails(e);
+      result = new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+
+    } catch (ValidationException e) {
+      LOG.error(e.getMessage(), e);
+      // Builds the generic error JSON object
+      ErrorDetailsDTO errorDetails = createrErrorDetails(e);
+      result = new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+
+    } catch (ForbiddenException e) {
+      LOG.error(e.getMessage(), e);
+      // Builds the generic error JSON object
+      ErrorDetailsDTO errorDetails = createrErrorDetails(e);
+      result = new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
     } catch (Exception e) {
       LOG.error(e.getMessage(), e);
 
@@ -92,8 +112,8 @@ public class JsonResponseHandlerInterceptor implements HandlerInterceptor {
 
     String errorCode;
     String userError;
-    if (ex instanceof BusinessException) {
-      BusinessException be = (BusinessException) ex;
+    if (ex instanceof CommonBaseException) {
+      CommonBaseException be = (CommonBaseException) ex;
 
       userError = messageSource.getMessage("error." + be.getCode(), null, Locale.getDefault());
       errorCode = "" + be.getCode();

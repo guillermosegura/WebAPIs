@@ -3,9 +3,11 @@ package mx.axity.com.webapi.rest.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -27,7 +29,9 @@ import com.google.gson.GsonBuilder;
 import mx.axity.com.webapi.rest.commons.dto.BookDTO;
 import mx.axity.com.webapi.rest.commons.dto.PaginatedDTO;
 import mx.axity.com.webapi.rest.commons.exception.BusinessException;
+import mx.axity.com.webapi.rest.commons.exception.ValidationException;
 import mx.axity.com.webapi.rest.service.BookService;
+import mx.axity.com.webapi.rest.service.util.BookFactory;
 
 /**
  * This class contains unit tests for the BookController class.
@@ -69,7 +73,7 @@ class BookControllerTest {
 
   @MockBean
   private BookService bookService;
-
+  
   /**
    * Unit test for the "getById" endpoint of the BookController class.
    * 
@@ -87,7 +91,7 @@ class BookControllerTest {
     String title = "The Hitchhiker's Guide to the Galaxy";
     String author = "Douglas Adams";
     String genre = "Science Fiction";
-    when(this.bookService.getById(1)).thenReturn(createBook(1, title, author, genre));
+    when(this.bookService.getById(1)).thenReturn(BookFactory.createBookDTO(1, title, author, genre));
 
 
     MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/books/1")) //
@@ -140,12 +144,12 @@ class BookControllerTest {
    */
   @Test
   void testGetAll() throws Exception {
-    BookDTO book1 = createBook(1, "Dune", "Frank Herbert", "Science Fiction");
-    BookDTO book2 = createBook(2, "Dune Messiah", "Frank Herbert", "Science Fiction");
-    BookDTO book3 = createBook(3, "Children of Dune", "Frank Herbert", "Science Fiction");
-    BookDTO book4 = createBook(4, "God Emperor of Dune", "Frank Herbert", "Science Fiction");
-    BookDTO book5 = createBook(5, "Heretics of Dune", "Frank Herbert", "Science Fiction");
-    BookDTO book6 = createBook(6, "Chapterhouse: Dune", "Frank Herbert", "Science Fiction");
+    BookDTO book1 = BookFactory.createBookDTO(1, "Dune", "Frank Herbert", "Science Fiction");
+    BookDTO book2 = BookFactory.createBookDTO(2, "Dune Messiah", "Frank Herbert", "Science Fiction");
+    BookDTO book3 = BookFactory.createBookDTO(3, "Children of Dune", "Frank Herbert", "Science Fiction");
+    BookDTO book4 = BookFactory.createBookDTO(4, "God Emperor of Dune", "Frank Herbert", "Science Fiction");
+    BookDTO book5 = BookFactory.createBookDTO(5, "Heretics of Dune", "Frank Herbert", "Science Fiction");
+    BookDTO book6 = BookFactory.createBookDTO(6, "Chapterhouse: Dune", "Frank Herbert", "Science Fiction");
 
     int size = 10;
     int offset = 0;
@@ -159,7 +163,8 @@ class BookControllerTest {
 
 
     MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/books") //
-        .queryParam("size", String.valueOf(size)).queryParam("offset", String.valueOf(offset))) //
+        .queryParam("size", String.valueOf(size)) //
+        .queryParam("offset", String.valueOf(offset))) //
         .andExpect(jsonPath("$.size").value(String.valueOf(size))) //
         .andExpect(jsonPath("$.offset").value(String.valueOf(offset))) //
         .andExpect(jsonPath("$.records").value(String.valueOf(records))) //
@@ -175,6 +180,31 @@ class BookControllerTest {
     assertNotNull(result);
     assertEquals(MediaType.APPLICATION_JSON_VALUE, result.getResponse().getHeader(HttpHeaders.CONTENT_TYPE));
     assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+
+  }
+  
+  @Test
+  void testGetAll_notFound() throws Exception {
+
+    int size = 10;
+    int offset = 0;
+    int records = 0;
+    int pages = 1;
+    List<BookDTO> books = new ArrayList<>();
+    PaginatedDTO<BookDTO> paginated = new PaginatedDTO<>(books, size, offset, records, pages);
+
+
+    when(this.bookService.getAll(size, offset)).thenReturn(paginated);
+
+
+    MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/books") //
+        .queryParam("size", String.valueOf(size)) //
+        .queryParam("offset", String.valueOf(offset))) //
+        .andExpect(status().isNotFound()) //
+        .andReturn();
+
+    assertNotNull(result);
+    assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
 
   }
 
@@ -195,10 +225,10 @@ class BookControllerTest {
     String author = "Douglas Adams";
     String genre = "Science Fiction";
 
-    BookDTO book = createBook(1, title, author, genre);
+    BookDTO book = BookFactory.createBookDTO(1, title, author, genre);
     Gson gson = new GsonBuilder().create();
 
-    when(this.bookService.create(any(BookDTO.class))).thenReturn(book);
+    when(this.bookService.create(any(BookDTO.class), anyBoolean())).thenReturn(book);
 
     MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/books") //
         .content(gson.toJson(book)) //
@@ -215,6 +245,7 @@ class BookControllerTest {
     assertEquals(MediaType.APPLICATION_JSON_VALUE, result.getResponse().getHeader(HttpHeaders.CONTENT_TYPE));
     assertEquals(HttpStatus.CREATED.value(), result.getResponse().getStatus());
     assertEquals("/api/books/1", result.getResponse().getHeader(HttpHeaders.LOCATION));
+    assertNotNull(result.getResponse().getHeader("X-Value"));
   }
 
   /**
@@ -229,17 +260,17 @@ class BookControllerTest {
    * @throws Exception if an error occurs during the test.
    */
   @Test
-  void testCreate_Exception() throws Exception {
+  void testCreate_BusinessExceptionRegitryFound() throws Exception {
     String title = "The Hitchhiker's Guide to the Galaxy";
     String author = "Douglas Adams";
     String genre = "Science Fiction";
     String userError = this.messageSource.getMessage("error.100", null, Locale.getDefault());
 
-    BookDTO book = createBook(1, title, author, genre);
+    BookDTO book = BookFactory.createBookDTO(1, title, author, genre);
     Gson gson = new GsonBuilder().create();
 
     BusinessException be = new BusinessException("Registry found", 100);
-    when(this.bookService.create(any(BookDTO.class))).thenThrow(be);
+    when(this.bookService.create(any(BookDTO.class), anyBoolean())).thenThrow(be);
 
     MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/books") //
         .content(gson.toJson(book)) //
@@ -254,6 +285,34 @@ class BookControllerTest {
     assertNotNull(result);
     assertEquals(MediaType.APPLICATION_JSON_VALUE, result.getResponse().getHeader(HttpHeaders.CONTENT_TYPE));
     assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), result.getResponse().getStatus());
+  }
+  
+  @Test
+  void testCreate_ValidationException() throws Exception {
+    String title = "The Hitchhiker's Guide to the Galaxy";
+    String author = "Douglas Adams";
+    String genre = "Science Fiction";
+    String userError = this.messageSource.getMessage("error.1", null, Locale.getDefault());
+
+    BookDTO book = BookFactory.createBookDTO(1, title, author, genre);
+    Gson gson = new GsonBuilder().create();
+
+    ValidationException validationException = new ValidationException("An error has occurred!!!", 1);
+    when(this.bookService.create(any(BookDTO.class), anyBoolean())).thenThrow(validationException);
+
+    MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/books") //
+        .content(gson.toJson(book)) //
+        .accept(MediaType.APPLICATION_JSON) //
+        .contentType(MediaType.APPLICATION_JSON)) //
+        .andExpect(status().isBadRequest()) //
+        .andExpect(jsonPath("$.errorMessage").value(validationException.getMessage())) //
+        .andExpect(jsonPath("$.errorCode").value(String.valueOf(validationException.getCode()))) //
+        .andExpect(jsonPath("$.userError").value(userError)) //
+        .andReturn();
+
+    assertNotNull(result);
+    assertEquals(MediaType.APPLICATION_JSON_VALUE, result.getResponse().getHeader(HttpHeaders.CONTENT_TYPE));
+    assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
   }
 
   /**
@@ -273,7 +332,7 @@ class BookControllerTest {
     String author = "Douglas Adams";
     String genre = "Science Fiction";
 
-    BookDTO book = createBook(1, title, author, genre);
+    BookDTO book = BookFactory.createBookDTO(1, title, author, genre);
     Gson gson = new GsonBuilder().create();
 
     when(this.bookService.update(any(BookDTO.class))).thenReturn(book);
@@ -310,7 +369,7 @@ class BookControllerTest {
     String author = "Douglas Adams";
     String genre = "Science Fiction";
 
-    BookDTO book = createBook(1, title, author, genre);
+    BookDTO book = BookFactory.createBookDTO(1, title, author, genre);
     Gson gson = new GsonBuilder().create();
 
     when(this.bookService.update(any(BookDTO.class))).thenReturn(null);
@@ -371,15 +430,6 @@ class BookControllerTest {
 
     assertNotNull(result);
     assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus());
-  }
-
-  private static BookDTO createBook(int id, String title, String author, String genre) {
-    BookDTO book = new BookDTO();
-    book.setId(id);
-    book.setTitle(title);
-    book.setAuthor(author);
-    book.setGenre(genre);
-    return book;
   }
 
 }

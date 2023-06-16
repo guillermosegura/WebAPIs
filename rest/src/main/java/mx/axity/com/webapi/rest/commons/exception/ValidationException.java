@@ -6,7 +6,7 @@ package mx.axity.com.webapi.rest.commons.exception;
  * 
  * @author guillermo.segura@axity.com
  */
-public class BusinessException extends CommonBaseException {
+public class ValidationException extends CommonBaseException {
 
   private static final long serialVersionUID = -7021338792240031291L;
   private int code;
@@ -16,7 +16,7 @@ public class BusinessException extends CommonBaseException {
    *
    * @param code the error code associated with the exception
    */
-  public BusinessException(int code) {
+  public ValidationException(int code) {
     super(code);
   }
 
@@ -25,7 +25,7 @@ public class BusinessException extends CommonBaseException {
    *
    * @param message the error message
    */
-  public BusinessException(String message) {
+  public ValidationException(String message) {
     super(message);
   }
 
@@ -34,7 +34,7 @@ public class BusinessException extends CommonBaseException {
    *
    * @param cause the cause of the exception
    */
-  public BusinessException(Throwable cause) {
+  public ValidationException(Throwable cause) {
     super(cause);
   }
 
@@ -44,7 +44,7 @@ public class BusinessException extends CommonBaseException {
    * @param message the error message
    * @param cause the cause of the exception
    */
-  public BusinessException(String message, Throwable cause) {
+  public ValidationException(String message, Throwable cause) {
     super(message, cause);
   }
 
@@ -54,7 +54,7 @@ public class BusinessException extends CommonBaseException {
    * @param message the error message
    * @param code the error code associated with the exception
    */
-  public BusinessException(String message, int code) {
+  public ValidationException(String message, int code) {
     super(message);
     this.code = code;
   }
@@ -66,7 +66,7 @@ public class BusinessException extends CommonBaseException {
    * @param cause the cause of the exception
    * @param code the error code associated with the exception
    */
-  public BusinessException(String message, Throwable cause, int code) {
+  public ValidationException(String message, Throwable cause, int code) {
     super(message, cause);
     this.code = code;
   }
@@ -77,7 +77,7 @@ public class BusinessException extends CommonBaseException {
    * @param cause the cause of the exception
    * @param code the error code associated with the exception
    */
-  public BusinessException(Throwable cause, int code) {
+  public ValidationException(Throwable cause, int code) {
     super(cause);
     this.code = code;
   }

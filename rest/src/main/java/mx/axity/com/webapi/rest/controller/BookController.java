@@ -1,5 +1,7 @@
 package mx.axity.com.webapi.rest.controller;
 
+import java.util.List;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +34,7 @@ import mx.axity.com.webapi.rest.service.BookService;
  */
 @RestController
 @RequestMapping("/api/books")
-@Tag(name = "books", description = "Operations related to books")
+@Tag(name = "API Books", description = "Operations related to books")
 public class BookController {
 
   @Autowired
@@ -46,16 +49,63 @@ public class BookController {
   @Operation(summary = "Get a book by ID")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Book found"),
       @ApiResponse(responseCode = "404", description = "Book not found")})
-  @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(path = "/{id}",
+      produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_PLAIN_VALUE})
   @JsonResponseInterceptor
-  public ResponseEntity<BookDTO> getById(@PathVariable("id") Integer id) {
+  public ResponseEntity<BookDTO> getById(@PathVariable("id") Integer id,
+      @RequestParam(value = "type", required = false, defaultValue = "json") String type) {
     BookDTO book = this.bookService.getById(id);
 
-    if (book != null) {
-      return ResponseEntity.ok(book);
+    ResponseEntity<BookDTO> response;
+    if (book == null) {
+      response = ResponseEntity.notFound().build();
+    } else {
+      response = this.createResponse(book, type);
     }
 
-    return ResponseEntity.notFound().build();
+    return response;
+  }
+
+  @GetMapping(path = "/example", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<List<BookDTO>> findByExample(BookDTO example) {
+    // Es equivalente a usar:
+    // @RequestParam(value = "id", required = false ) Integer id,
+    // @RequestParam(value = "title", required = false ) String title,
+    // @RequestParam(value = "author", required = false ) String author,
+    // @RequestParam(value = "genre", required = false ) String genre
+    // BookDTO example = BookFactory.createBookDTO(id, title, author, genre);
+
+    List<BookDTO> books = this.bookService.findByExample(example);
+    if (books.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+
+    return ResponseEntity.ok(books);
+  }
+
+  private ResponseEntity<BookDTO> createResponse(BookDTO book, String type) {
+
+    HttpHeaders headers = new HttpHeaders();
+
+
+    ResponseEntity<BookDTO> response;
+    String contentType;
+    switch (type.toLowerCase()) {
+      case "json":
+        contentType = MediaType.APPLICATION_JSON_VALUE;
+        break;
+      case "xml":
+        contentType = MediaType.APPLICATION_XML_VALUE;
+        break;
+      case "text":
+        contentType = MediaType.TEXT_PLAIN_VALUE;
+        break;
+      default:
+        contentType = MediaType.APPLICATION_JSON_VALUE;
+    }
+    headers.add(HttpHeaders.CONTENT_TYPE, contentType);
+
+    return ResponseEntity.status(HttpStatus.OK).headers(headers).body(book);
   }
 
   /**
@@ -75,6 +125,10 @@ public class BookController {
 
     PaginatedDTO<BookDTO> paginated = this.bookService.getAll(size, offset);
 
+    if (paginated.getItems().isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+
     return ResponseEntity.ok(paginated);
   }
 
@@ -89,15 +143,16 @@ public class BookController {
       @ApiResponse(responseCode = "500", description = "Internal server error")})
   @PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   @JsonResponseInterceptor
-  public ResponseEntity<BookDTO> create(@RequestBody BookDTO book) {
+  public ResponseEntity<BookDTO> create(@RequestBody BookDTO book,
+      @RequestHeader(name = "X-AllowDuplicate", required = false, defaultValue = "false") String allowDuplicate) {
 
     ResponseEntity<BookDTO> response;
-    BookDTO created = this.bookService.create(book);
+    BookDTO created = this.bookService.create(book, Boolean.parseBoolean(allowDuplicate));
     HttpHeaders headers = new HttpHeaders();
-    headers.add(HttpHeaders.LOCATION, "/api/books/" + book.getId());
+    headers.add(HttpHeaders.LOCATION, "/api/books/" + created.getId());
+    headers.add("X-Value", UUID.randomUUID().toString());
 
     response = ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(created);
-
     return response;
   }
 
