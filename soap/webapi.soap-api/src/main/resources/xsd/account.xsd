@@ -18,6 +18,7 @@
       <xs:element name="person" type="tns:Person" />
       <xs:element name="balance" type="xs:decimal" />
       <xs:element name="movements" type="tns:AccountMovementList" />
+      <xs:element name="data" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 

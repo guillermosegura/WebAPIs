@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="person" type="{http://axity.com.mx/webapi/soap/api/ws/account}Person"/&gt;
  *         &lt;element name="balance" type="{http://www.w3.org/2001/XMLSchema}decimal"/&gt;
  *         &lt;element name="movements" type="{http://axity.com.mx/webapi/soap/api/ws/account}AccountMovementList"/&gt;
+ *         &lt;element name="data" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -35,7 +36,8 @@ import javax.xml.bind.annotation.XmlType;
     "id",
     "person",
     "balance",
-    "movements"
+    "movements",
+    "data"
 })
 public class Account {
 
@@ -46,6 +48,8 @@ public class Account {
     protected BigDecimal balance;
     @XmlElement(required = true)
     protected AccountMovementList movements;
+    @XmlElement(required = true)
+    protected String data;
 
     /**
      * Obtiene el valor de la propiedad id.
@@ -133,6 +137,30 @@ public class Account {
      */
     public void setMovements(AccountMovementList value) {
         this.movements = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad data.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getData() {
+        return data;
+    }
+
+    /**
+     * Define el valor de la propiedad data.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setData(String value) {
+        this.data = value;
     }
 
 }

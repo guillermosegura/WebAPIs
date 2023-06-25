@@ -1,16 +1,24 @@
 package mx.axity.com.webapi.rest.commons.dto;
 
-import java.util.ArrayList;
 import java.util.List;
-import org.springframework.hateoas.Link;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StudentDTO {
+  @JsonProperty(value = "studentId", index = 0)
   private Integer id;
+  @JsonProperty(index = 1)
   private String name;
+  @JsonProperty(index = 2)
   private String lastname;
+  @JsonProperty(index = 3)
   private String email;
+  @JsonProperty(index = 4)
   private Integer advisorId;
+  @JsonProperty(index = 5)
   private ProfessorDTO advisor;
+  @JsonProperty(index = 6)
   private List<CourseDTO> courses;
 
   /**

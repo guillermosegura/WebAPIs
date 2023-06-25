@@ -27,8 +27,8 @@ public class StudentController {
     // Lógica para obtener todos los estudiantes desde tu servicio o repositorio
     List<StudentDTO> students = studentService.findAll();
 
-    // Crear enlace a sí mismo
-    Link selfLink = WebMvcLinkBuilder.linkTo(StudentController.class).withSelfRel();
+//    // Crear enlace a sí mismo
+//    Link selfLink = WebMvcLinkBuilder.linkTo(StudentController.class).withSelfRel();
 
     // Crear una lista de EntityModel<Student>
     List<EntityModel<StudentDTO>> studentModels = new ArrayList<>();

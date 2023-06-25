@@ -29,6 +29,11 @@ public class CourseController {
 
     // Agregar enlace al estudiante
     EntityModel<CourseDTO> courseModel = EntityModel.of(course, selfLink);
+    
+    Link instructorLink = WebMvcLinkBuilder
+        .linkTo(WebMvcLinkBuilder.methodOn(ProfessorController.class).getProfessor(course.getInstructorId()))
+        .withRel("instructor");
+    courseModel.add(instructorLink);
 
     return courseModel;
   }

@@ -1,5 +1,8 @@
 package mx.axity.com.webapi.rest.commons.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProfessorDTO {
   private Integer id;
   private String name;
